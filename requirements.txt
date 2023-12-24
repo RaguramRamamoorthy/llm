@@ -3,3 +3,5 @@ langchain
 PyPDF2
 faiss-cpu
 streamlit==1.27.2
+google-cloud-aiplatform
+vertexai
