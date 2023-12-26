@@ -11,6 +11,9 @@ import os
 
 os.environ['GOOGLE_API_KEY'] = 'AIzaSyDfd6oqRl-DNRWeaTWV7osXrXkgr7fYJrc'
 
+if 'chatHistory' not in st.session_state:
+    st.session_state.chatHistory = []
+
 
 def get_pdf_text(pdf_docs):
     text = ""
