@@ -41,14 +41,30 @@ def get_conversational_chain(vector_store):
     return conversation_chain
 
 
+# def user_input(user_question):
+#     response = st.session_state.conversation({'question': user_question})
+#     st.session_state.chatHistory = response['chat_history']
+#     for i, message in enumerate(st.session_state.chatHistory):
+#         if i % 2 == 0:
+#             st.write("Human: ", message.content)
+#         else:
+#             st.write("Bot: ", message.content)
+
+
 def user_input(user_question):
-    response = st.session_state.conversation({'question': user_question})
-    st.session_state.chatHistory = response['chat_history']
-    for i, message in enumerate(st.session_state.chatHistory):
-        if i % 2 == 0:
-            st.write("Human: ", message.content)
-        else:
-            st.write("Bot: ", message.content)
+    # Create a more detailed prompt for the LLM
+    prompt = f"Please provide an explanation with reasons for the following question based on the PDF content: {user_question} "
+
+    # Send the prompt to the LLM and get the response
+    llm_response = st.session_state.conversation({'prompt': prompt, 'question': user_question})
+
+    # Update chat history with the user's question and LLM's response
+    st.session_state.chatHistory.append({'content': user_question, 'type': 'Human'})
+    st.session_state.chatHistory.append({'content': llm_response, 'type': 'Bot'})
+
+    # Display the conversation
+    for message in st.session_state.chatHistory:
+        st.write(f"{message['type']}: {message['content']}")
 
 
 def main():
