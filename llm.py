@@ -50,7 +50,6 @@ def get_conversational_chain(vector_store):
 #         else:
 #             st.write("Bot: ", message.content)
 
-
 def user_input(user_question):
     # Ensure chatHistory is initialized
     if 'chatHistory' not in st.session_state or st.session_state.chatHistory is None:
@@ -60,11 +59,14 @@ def user_input(user_question):
     combined_prompt = f"Explain the answer with reasons for the following question based on the PDF content: {user_question}"
 
     # Send the combined prompt to the LLM and get the response
-    llm_response = st.session_state.conversation(combined_prompt)
+    response = st.session_state.conversation(combined_prompt)
 
-    # Update chat history with the user's question and LLM's response
+    # Extract only the answer from the response
+    llm_answer = response['answer'] if 'answer' in response else "No answer provided"
+
+    # Update chat history with the user's question and LLM's answer
     st.session_state.chatHistory.append({'content': user_question, 'type': 'Human'})
-    st.session_state.chatHistory.append({'content': llm_response, 'type': 'Bot'})
+    st.session_state.chatHistory.append({'content': llm_answer, 'type': 'Bot'})
 
     # Display the conversation
     for message in st.session_state.chatHistory:
