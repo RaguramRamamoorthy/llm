@@ -52,6 +52,10 @@ def get_conversational_chain(vector_store):
 
 
 def user_input(user_question):
+    # Ensure chatHistory is initialized
+    if 'chatHistory' not in st.session_state or st.session_state.chatHistory is None:
+        st.session_state.chatHistory = []
+
     # Combine the user's question with the instruction for the LLM into a single string
     combined_prompt = f"Explain the answer with reasons for the following question based on the PDF content: {user_question}"
 
@@ -64,7 +68,10 @@ def user_input(user_question):
 
     # Display the conversation
     for message in st.session_state.chatHistory:
-        st.write(f"{message['type']}: {message['content']}")
+        if message['type'] == 'Human':
+            st.write("Human: ", message['content'])
+        else:
+            st.write("Bot: ", message['content'])
 
 
 def main():
